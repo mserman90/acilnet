@@ -1,0 +1,1 @@
+# Afet-Durumlar-nda-Mesh-Tabanl-Acil-Haberle-me-A-
