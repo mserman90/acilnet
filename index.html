@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MeshLine — Altyapısız Afet İletişimi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #0A0D12;
+    --surface: #12171F;
+    --surface-2: #171D26;
+    --line: #232B36;
+    --text: #F1F0EC;
+    --muted: #8A93A3;
+    --signal: #FF5A1F;   /* broadcast / alert amber-orange */
+    --mesh: #3DDC97;     /* connected / mesh green */
+    --font-display: 'Space Grotesk', sans-serif;
+    --font-body: 'Inter', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+  }
+
+  *{ margin:0; padding:0; box-sizing:border-box; }
+
+  html{ scroll-behavior: smooth; }
+
+  body{
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  a{ color: inherit; text-decoration: none; }
+
+  .wrap{ max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+
+  /* ---------- NAV ---------- */
+  nav{
+    position: sticky; top:0; z-index: 50;
+    background: rgba(10,13,18,0.85);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--line);
+  }
+  nav .wrap{ display:flex; align-items:center; justify-content:space-between; height:64px; }
+  .brand{ font-family: var(--font-display); font-weight:700; font-size: 1.1rem; letter-spacing: -0.02em; display:flex; align-items:center; gap:8px; }
+  .brand-dot{ width:8px; height:8px; border-radius:50%; background: var(--mesh); box-shadow: 0 0 10px var(--mesh); animation: pulse 2s ease-in-out infinite; }
+  @keyframes pulse{ 0%,100%{ opacity:1; } 50%{ opacity:0.35; } }
+  .navlinks{ display:flex; gap: 28px; font-size:0.9rem; color: var(--muted); }
+  .navlinks a:hover{ color: var(--text); }
+  @media (max-width: 720px){ .navlinks{ display:none; } }
+
+  /* ---------- HERO ---------- */
+  .hero{ position:relative; padding: 100px 0 80px; overflow:hidden; }
+  #meshCanvas{ position:absolute; inset:0; width:100%; height:100%; opacity:0.55; }
+  .hero .wrap{ position:relative; z-index:2; }
+  .eyebrow{ font-family: var(--font-mono); font-size:0.78rem; color: var(--mesh); letter-spacing:0.08em; text-transform:uppercase; margin-bottom: 18px; display:flex; align-items:center; gap:10px; }
+  .eyebrow::before{ content:''; width:18px; height:1px; background: var(--mesh); }
+  h1{
+    font-family: var(--font-display);
+    font-size: clamp(2.4rem, 6vw, 4.2rem);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+    max-width: 780px;
+  }
+  h1 .accent{ color: var(--signal); }
+  .lede{ margin-top:22px; font-size: 1.15rem; color: var(--muted); max-width: 560px; }
+  .hero-cta{ margin-top: 36px; display:flex; gap:14px; flex-wrap:wrap; }
+  .btn{ font-family: var(--font-body); font-weight:600; font-size:0.92rem; padding: 13px 24px; border-radius:6px; border:1px solid var(--line); transition: all .2s ease; }
+  .btn-primary{ background: var(--signal); color:#0A0D12; border-color: var(--signal); }
+  .btn-primary:hover{ background: #ff6e3d; }
+  .btn-ghost:hover{ border-color: var(--mesh); color: var(--mesh); }
+
+  .terminal{
+    margin-top: 56px; max-width: 520px;
+    background: var(--surface); border:1px solid var(--line); border-radius: 8px;
+    font-family: var(--font-mono); font-size: 0.8rem; color: var(--muted);
+    padding: 16px 18px;
+  }
+  .terminal .line{ margin-bottom:4px; white-space:nowrap; overflow:hidden; }
+  .terminal .ok{ color: var(--mesh); }
+  .terminal .warn{ color: var(--signal); }
+
+  /* ---------- SECTION SHARED ---------- */
+  section{ padding: 90px 0; border-top: 1px solid var(--line); }
+  .section-head{ margin-bottom: 48px; }
+  .kicker{ font-family: var(--font-mono); font-size:0.75rem; color: var(--signal); letter-spacing:0.1em; text-transform:uppercase; margin-bottom:12px; }
+  h2{ font-family: var(--font-display); font-size: clamp(1.6rem, 3.4vw, 2.3rem); font-weight:600; letter-spacing:-0.02em; }
+  .section-sub{ color: var(--muted); margin-top:12px; max-width: 620px; }
+
+  /* ---------- PROBLEM / SOLUTION ---------- */
+  .split{ display:grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+  @media (max-width: 780px){ .split{ grid-template-columns: 1fr; } }
+  .card{ background: var(--surface); border:1px solid var(--line); border-radius:10px; padding: 28px; }
+  .card h3{ font-family: var(--font-display); font-size:1.15rem; margin-bottom: 14px; display:flex; align-items:center; gap:10px; }
+  .tag-x{ color:#5A4238; }
+  .tag-ok{ color: var(--mesh); }
+  .card ul{ list-style:none; }
+  .card li{ padding: 8px 0; border-top:1px dashed var(--line); color: var(--muted); font-size:0.94rem; }
+  .card li:first-child{ border-top:none; }
+
+  /* ---------- ARCHITECTURE ---------- */
+  .arch-box{ background: var(--surface); border:1px solid var(--line); border-radius:10px; padding: 32px; text-align:center; }
+  .arch-box svg{ max-width:100%; height:auto; }
+  .arch-note{ font-family: var(--font-mono); font-size:0.8rem; color: var(--muted); margin-top: 18px; }
+
+  /* ---------- TEAM ---------- */
+  .team-grid{ display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
+  .member{ background: var(--surface); border:1px solid var(--line); border-radius:10px; padding: 22px; text-align:center; }
+  .avatar{ width:72px; height:72px; border-radius:50%; margin: 0 auto 16px; background: linear-gradient(135deg, var(--surface-2), var(--line)); display:flex; align-items:center; justify-content:center; font-family:var(--font-mono); color:var(--muted); font-size:0.75rem; border:1px solid var(--line); }
+  .member h4{ font-family: var(--font-display); font-size:1rem; margin-bottom:4px; }
+  .role{ font-size:0.82rem; color: var(--signal); font-family: var(--font-mono); margin-bottom:10px; }
+  .m-links{ display:flex; gap:10px; justify-content:center; font-size:0.8rem; color: var(--muted); }
+  .m-links a:hover{ color: var(--mesh); }
+
+  /* ---------- REPORTS ---------- */
+  .report-list{ display:flex; flex-direction:column; gap:1px; background: var(--line); border:1px solid var(--line); border-radius:10px; overflow:hidden; }
+  .report-row{ background: var(--surface); padding: 20px 24px; display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap; }
+  .report-row .rname{ font-family: var(--font-display); font-weight:600; }
+  .report-row .rdesc{ font-size:0.85rem; color: var(--muted); margin-top:4px; }
+  .report-links{ display:flex; gap:10px; }
+  .pill{ font-family: var(--font-mono); font-size:0.75rem; padding:7px 14px; border-radius:20px; border:1px solid var(--line); color: var(--muted); transition:.2s; }
+  .pill:hover{ border-color: var(--mesh); color: var(--mesh); }
+
+  /* ---------- ADVISOR ---------- */
+  .advisor{ display:flex; align-items:center; gap:24px; background: var(--surface); border:1px solid var(--line); border-radius:10px; padding: 28px; flex-wrap:wrap; }
+  .advisor .avatar{ flex-shrink:0; }
+  .advisor-name{ font-family: var(--font-display); font-size:1.15rem; }
+  .advisor-role{ color: var(--muted); font-size:0.9rem; margin-top:4px; }
+
+  /* ---------- FOOTER ---------- */
+  footer{ padding: 60px 0 40px; border-top:1px solid var(--line); }
+  .foot-grid{ display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap: 24px; }
+  .foot-brand{ font-family: var(--font-display); font-weight:700; }
+  .foot-links{ display:flex; gap:20px; font-size:0.88rem; color: var(--muted); }
+  .foot-links a:hover{ color: var(--signal); }
+  .copyright{ margin-top:40px; font-size:0.78rem; color:#4B5563; font-family: var(--font-mono); }
+
+  .reveal{ opacity:0; transform: translateY(16px); transition: opacity .6s ease, transform .6s ease; }
+  .reveal.in{ opacity:1; transform:none; }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation: none !important; transition: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <div class="brand"><span class="brand-dot"></span> MeshLine</div>
+    <div class="navlinks">
+      <a href="#cozum">Çözüm</a>
+      <a href="#mimari">Mimari</a>
+      <a href="#takim">Takım</a>
+      <a href="#raporlar">Raporlar</a>
+      <a href="#iletisim">İletişim</a>
+    </div>
+  </div>
+</nav>
+
+<section class="hero">
+  <canvas id="meshCanvas"></canvas>
+  <div class="wrap">
+    <div class="eyebrow">BIL495 · Bitirme Projesi</div>
+    <h1>Altyapı çöktüğünde<br>iletişim <span class="accent">durmaz.</span></h1>
+    <p class="lede">GSM, Wi-Fi ve internet olmadan; BLE ve Wi-Fi üzerinden kurulan cihazdan cihaza mesh ağı ile deprem sonrası anlık iletişim. Sunucu yok, ek donanım yok — sadece telefonlar.</p>
+    <div class="hero-cta">
+      <a href="#raporlar" class="btn btn-primary">Raporları incele</a>
+      <a href="#" class="btn btn-ghost" style="border:1px solid var(--line);">GitHub'da görüntüle</a>
+    </div>
+    <div class="terminal">
+      <div class="line">$ mesh --status</div>
+      <div class="line ok">✓ 4 düğüm bulundu (BLE taraması)</div>
+      <div class="line ok">✓ rota kuruldu: node_07 → node_12 → node_03</div>
+      <div class="line warn">⚠ internet: yok · gsm: yok · mesh: aktif</div>
+      <div class="line">$ mesaj iletildi — 3 hop, 214ms</div>
+    </div>
+  </div>
+</section>
+
+<section id="cozum">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="kicker">Problem &amp; Çözüm</div>
+      <h2>Merkezi altyapı tek nokta arızasıdır</h2>
+      <p class="section-sub">Depremde baz istasyonları ve internet omurgası devre dışı kaldığında klasik iletişim tamamen kesilir. MeshLine, cihazları birbirinin altyapısı haline getirir.</p>
+    </div>
+    <div class="split">
+      <div class="card reveal">
+        <h3><span class="tag-x">✕</span> Klasik iletişim</h3>
+        <ul>
+          <li>Baz istasyonuna bağımlı GSM şebekesi</li>
+          <li>İnternet omurgası kesilince tüm servisler durur</li>
+          <li>Bridgefy gibi kapalı kaynak, ticari lisanslı alternatifler</li>
+          <li>USENIX 2022'de belgelenen güvenlik açıkları</li>
+        </ul>
+      </div>
+      <div class="card reveal">
+        <h3><span class="tag-ok">✓</span> MeshLine yaklaşımı</h3>
+        <ul>
+          <li>BLE + Wi-Fi üzerinden doğrudan cihaz-cihaz bağlantısı</li>
+          <li>AODV tabanlı özel mesh yönlendirme</li>
+          <li>X.509 / PKI tabanlı uçtan uca güvenlik</li>
+          <li>Açık kaynak, Android odaklı, ek donanım gerektirmez</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="mimari">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="kicker">Mimari</div>
+      <h2>Ağ üç katmandan oluşur</h2>
+      <p class="section-sub">Fiziksel taşıma, yönlendirme ve güvenlik katmanları birbirinden bağımsız çalışır — her biri ayrı ayrı test edilir ve geliştirilir.</p>
+    </div>
+    <div class="arch-box reveal">
+      <svg viewBox="0 0 900 260" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L6,3 L0,6 Z" fill="#8A93A3"/>
+          </marker>
+        </defs>
+        <!-- Layer boxes -->
+        <rect x="40" y="40" width="220" height="180" rx="10" fill="#171D26" stroke="#232B36"/>
+        <rect x="340" y="40" width="220" height="180" rx="10" fill="#171D26" stroke="#232B36"/>
+        <rect x="640" y="40" width="220" height="180" rx="10" fill="#171D26" stroke="#232B36"/>
+
+        <text x="150" y="30" fill="#8A93A3" font-family="JetBrains Mono" font-size="12" text-anchor="middle">TAŞIMA</text>
+        <text x="450" y="30" fill="#8A93A3" font-family="JetBrains Mono" font-size="12" text-anchor="middle">YÖNLENDİRME</text>
+        <text x="750" y="30" fill="#8A93A3" font-family="JetBrains Mono" font-size="12" text-anchor="middle">GÜVENLİK</text>
+
+        <text x="150" y="100" fill="#F1F0EC" font-family="Space Grotesk" font-size="16" text-anchor="middle" font-weight="600">BLE / Wi-Fi</text>
+        <text x="150" y="130" fill="#8A93A3" font-family="Inter" font-size="12" text-anchor="middle">IEEE 802.15.1</text>
+        <text x="150" y="150" fill="#8A93A3" font-family="Inter" font-size="12" text-anchor="middle">cihazdan cihaza keşif</text>
+
+        <text x="450" y="100" fill="#F1F0EC" font-family="Space Grotesk" font-size="16" text-anchor="middle" font-weight="600">AODV</text>
+        <text x="450" y="130" fill="#8A93A3" font-family="Inter" font-size="12" text-anchor="middle">RFC 3561</text>
+        <text x="450" y="150" fill="#8A93A3" font-family="Inter" font-size="12" text-anchor="middle">talep üzerine rota kurma</text>
+
+        <text x="750" y="100" fill="#F1F0EC" font-family="Space Grotesk" font-size="16" text-anchor="middle" font-weight="600">X.509 / PKI</text>
+        <text x="750" y="130" fill="#8A93A3" font-family="Inter" font-size="12" text-anchor="middle">RFC 5280 · X25519</text>
+        <text x="750" y="150" fill="#8A93A3" font-family="Inter" font-size="12" text-anchor="middle">kimlik doğrulama &amp; şifreleme</text>
+
+        <line x1="260" y1="130" x2="330" y2="130" stroke="#8A93A3" stroke-width="1.5" marker-end="url(#arrow)"/>
+        <line x1="560" y1="130" x2="630" y2="130" stroke="#8A93A3" stroke-width="1.5" marker-end="url(#arrow)"/>
+      </svg>
+      <div class="arch-note">// Android hedefli — iOS'un arka planda BLE kısıtlamaları nedeniyle kapsam dışı bırakıldı</div>
+    </div>
+  </div>
+</section>
+
+<section id="takim">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="kicker">Takım</div>
+      <h2>Beş kişilik ekip, beş sorumluluk alanı</h2>
+    </div>
+    <div class="team-grid reveal">
+      <div class="member">
+        <div class="avatar">İS</div>
+        <h4>İsim Soyisim</h4>
+        <div class="role">BLE Protokolü</div>
+        <div class="m-links"><a href="#">LinkedIn</a><a href="#">GitHub</a></div>
+      </div>
+      <div class="member">
+        <div class="avatar">İS</div>
+        <h4>İsim Soyisim</h4>
+        <div class="role">Yönlendirme (AODV)</div>
+        <div class="m-links"><a href="#">LinkedIn</a><a href="#">GitHub</a></div>
+      </div>
+      <div class="member">
+        <div class="avatar">İS</div>
+        <h4>İsim Soyisim</h4>
+        <div class="role">Güvenlik / PKI</div>
+        <div class="m-links"><a href="#">LinkedIn</a><a href="#">GitHub</a></div>
+      </div>
+      <div class="member">
+        <div class="avatar">İS</div>
+        <h4>İsim Soyisim</h4>
+        <div class="role">Android Geliştirme</div>
+        <div class="m-links"><a href="#">LinkedIn</a><a href="#">GitHub</a></div>
+      </div>
+      <div class="member">
+        <div class="avatar">İS</div>
+        <h4>İsim Soyisim</h4>
+        <div class="role">Test &amp; Entegrasyon</div>
+        <div class="m-links"><a href="#">LinkedIn</a><a href="#">GitHub</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="raporlar">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="kicker">Raporlar</div>
+      <h2>Tüm proje dokümantasyonu</h2>
+      <p class="section-sub">Her rapor PDF ve DOCX formatında erişilebilir.</p>
+    </div>
+    <div class="report-list reveal">
+      <div class="report-row">
+        <div>
+          <div class="rname">Proje Önerisi</div>
+          <div class="rdesc">Kapsam, motivasyon ve genel yaklaşım</div>
+        </div>
+        <div class="report-links">
+          <a href="#" class="pill">PDF</a>
+          <a href="#" class="pill">DOCX</a>
+        </div>
+      </div>
+      <div class="report-row">
+        <div>
+          <div class="rname">Proje Özellikleri Raporu</div>
+          <div class="rdesc">Fonksiyonel ve fonksiyonel olmayan gereksinimler</div>
+        </div>
+        <div class="report-links">
+          <a href="#" class="pill">PDF</a>
+          <a href="#" class="pill">DOCX</a>
+        </div>
+      </div>
+      <div class="report-row">
+        <div>
+          <div class="rname">Analiz Raporu</div>
+          <div class="rdesc">Sistem analizi ve tasarım kararları</div>
+        </div>
+        <div class="report-links">
+          <a href="#" class="pill">PDF</a>
+          <a href="#" class="pill">DOCX</a>
+        </div>
+      </div>
+      <div class="report-row">
+        <div>
+          <div class="rname">Kısıt ve Etkiler Planı (PKE)</div>
+          <div class="rdesc">Standartlara uygunluk, kısıtlar ve beklenen etkiler</div>
+        </div>
+        <div class="report-links">
+          <a href="#" class="pill">PDF</a>
+          <a href="#" class="pill">DOCX</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="kicker">Danışman</div>
+    </div>
+    <div class="advisor reveal">
+      <div class="avatar" style="width:64px;height:64px;">SB</div>
+      <div>
+        <div class="advisor-name">Dr. Shadi Bikas</div>
+        <div class="advisor-role">Proje Danışmanı — TOBB ETÜ</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer id="iletisim">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand"><span class="brand-dot" style="display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--mesh);margin-right:8px;"></span>MeshLine</div>
+      <div class="foot-links">
+        <a href="mailto:takim@example.com">takim@example.com</a>
+        <a href="#">GitHub</a>
+        <a href="#raporlar">Raporlar</a>
+      </div>
+    </div>
+    <div class="copyright">TOBB ETÜ · BIL495 Bitirme Projesi · 2026</div>
+  </div>
+</footer>
+
+<script>
+  // Reveal on scroll
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: 0.15 });
+  revealEls.forEach(el=>io.observe(el));
+
+  // Hero mesh network canvas
+  const canvas = document.getElementById('meshCanvas');
+  const ctx = canvas.getContext('2d');
+  let w, h, nodes;
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function resize(){
+    w = canvas.width = canvas.offsetWidth;
+    h = canvas.height = canvas.offsetHeight;
+  }
+  function initNodes(){
+    const count = w < 700 ? 14 : 24;
+    nodes = Array.from({length: count}, ()=>({
+      x: Math.random()*w,
+      y: Math.random()*h,
+      vx: (Math.random()-0.5)*0.15,
+      vy: (Math.random()-0.5)*0.15,
+      pulse: Math.random()*Math.PI*2
+    }));
+  }
+
+  function draw(){
+    ctx.clearRect(0,0,w,h);
+    const maxDist = 160;
+
+    for(let i=0;i<nodes.length;i++){
+      for(let j=i+1;j<nodes.length;j++){
+        const a=nodes[i], b=nodes[j];
+        const dx=a.x-b.x, dy=a.y-b.y;
+        const dist=Math.sqrt(dx*dx+dy*dy);
+        if(dist<maxDist){
+          ctx.strokeStyle = `rgba(61,220,151,${0.18*(1-dist/maxDist)})`;
+          ctx.lineWidth=1;
+          ctx.beginPath();
+          ctx.moveTo(a.x,a.y);
+          ctx.lineTo(b.x,b.y);
+          ctx.stroke();
+        }
+      }
+    }
+
+    nodes.forEach(n=>{
+      if(!reducedMotion){
+        n.x += n.vx; n.y += n.vy;
+        if(n.x<0||n.x>w) n.vx*=-1;
+        if(n.y<0||n.y>h) n.vy*=-1;
+        n.pulse += 0.02;
+      }
+      const r = 2 + Math.sin(n.pulse)*1.2;
+      ctx.beginPath();
+      ctx.arc(n.x,n.y,r,0,Math.PI*2);
+      ctx.fillStyle = '#3DDC97';
+      ctx.fill();
+    });
+
+    if(!reducedMotion) requestAnimationFrame(draw);
+  }
+
+  window.addEventListener('resize', ()=>{ resize(); initNodes(); });
+  resize(); initNodes(); draw();
+</script>
+
+</body>
+</html>
