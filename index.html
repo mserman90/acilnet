@@ -14,36 +14,18 @@
     --line: #232B36;
     --text: #F1F0EC;
     --muted: #8A93A3;
-    --signal: #FF5A1F;   /* broadcast / alert amber-orange */
-    --mesh: #3DDC97;     /* connected / mesh green */
+    --signal: #FF5A1F;
+    --mesh: #3DDC97;
     --font-display: 'Space Grotesk', sans-serif;
     --font-body: 'Inter', sans-serif;
     --font-mono: 'JetBrains Mono', monospace;
   }
-
   *{ margin:0; padding:0; box-sizing:border-box; }
-
   html{ scroll-behavior: smooth; }
-
-  body{
-    background: var(--bg);
-    color: var(--text);
-    font-family: var(--font-body);
-    line-height: 1.6;
-    overflow-x: hidden;
-  }
-
+  body{ background: var(--bg); color: var(--text); font-family: var(--font-body); line-height: 1.6; overflow-x: hidden; }
   a{ color: inherit; text-decoration: none; }
-
   .wrap{ max-width: 1100px; margin: 0 auto; padding: 0 24px; }
-
-  /* ---------- NAV ---------- */
-  nav{
-    position: sticky; top:0; z-index: 50;
-    background: rgba(10,13,18,0.85);
-    backdrop-filter: blur(10px);
-    border-bottom: 1px solid var(--line);
-  }
+  nav{ position: sticky; top:0; z-index: 50; background: rgba(10,13,18,0.85); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
   nav .wrap{ display:flex; align-items:center; justify-content:space-between; height:64px; }
   .brand{ font-family: var(--font-display); font-weight:700; font-size: 1.1rem; letter-spacing: -0.02em; display:flex; align-items:center; gap:8px; }
   .brand-dot{ width:8px; height:8px; border-radius:50%; background: var(--mesh); box-shadow: 0 0 10px var(--mesh); animation: pulse 2s ease-in-out infinite; }
@@ -51,21 +33,12 @@
   .navlinks{ display:flex; gap: 28px; font-size:0.9rem; color: var(--muted); }
   .navlinks a:hover{ color: var(--text); }
   @media (max-width: 720px){ .navlinks{ display:none; } }
-
-  /* ---------- HERO ---------- */
   .hero{ position:relative; padding: 100px 0 80px; overflow:hidden; }
   #meshCanvas{ position:absolute; inset:0; width:100%; height:100%; opacity:0.55; }
   .hero .wrap{ position:relative; z-index:2; }
   .eyebrow{ font-family: var(--font-mono); font-size:0.78rem; color: var(--mesh); letter-spacing:0.08em; text-transform:uppercase; margin-bottom: 18px; display:flex; align-items:center; gap:10px; }
   .eyebrow::before{ content:''; width:18px; height:1px; background: var(--mesh); }
-  h1{
-    font-family: var(--font-display);
-    font-size: clamp(2.4rem, 6vw, 4.2rem);
-    font-weight: 700;
-    letter-spacing: -0.03em;
-    line-height: 1.05;
-    max-width: 780px;
-  }
+  h1{ font-family: var(--font-display); font-size: clamp(2.4rem, 6vw, 4.2rem); font-weight: 700; letter-spacing: -0.03em; line-height: 1.05; max-width: 780px; }
   h1 .accent{ color: var(--signal); }
   .lede{ margin-top:22px; font-size: 1.15rem; color: var(--muted); max-width: 560px; }
   .hero-cta{ margin-top: 36px; display:flex; gap:14px; flex-wrap:wrap; }
@@ -73,25 +46,15 @@
   .btn-primary{ background: var(--signal); color:#0A0D12; border-color: var(--signal); }
   .btn-primary:hover{ background: #ff6e3d; }
   .btn-ghost:hover{ border-color: var(--mesh); color: var(--mesh); }
-
-  .terminal{
-    margin-top: 56px; max-width: 520px;
-    background: var(--surface); border:1px solid var(--line); border-radius: 8px;
-    font-family: var(--font-mono); font-size: 0.8rem; color: var(--muted);
-    padding: 16px 18px;
-  }
+  .terminal{ margin-top: 56px; max-width: 520px; background: var(--surface); border:1px solid var(--line); border-radius: 8px; font-family: var(--font-mono); font-size: 0.8rem; color: var(--muted); padding: 16px 18px; }
   .terminal .line{ margin-bottom:4px; white-space:nowrap; overflow:hidden; }
   .terminal .ok{ color: var(--mesh); }
   .terminal .warn{ color: var(--signal); }
-
-  /* ---------- SECTION SHARED ---------- */
   section{ padding: 90px 0; border-top: 1px solid var(--line); }
   .section-head{ margin-bottom: 48px; }
   .kicker{ font-family: var(--font-mono); font-size:0.75rem; color: var(--signal); letter-spacing:0.1em; text-transform:uppercase; margin-bottom:12px; }
   h2{ font-family: var(--font-display); font-size: clamp(1.6rem, 3.4vw, 2.3rem); font-weight:600; letter-spacing:-0.02em; }
   .section-sub{ color: var(--muted); margin-top:12px; max-width: 620px; }
-
-  /* ---------- PROBLEM / SOLUTION ---------- */
   .split{ display:grid; grid-template-columns: 1fr 1fr; gap: 28px; }
   @media (max-width: 780px){ .split{ grid-template-columns: 1fr; } }
   .card{ background: var(--surface); border:1px solid var(--line); border-radius:10px; padding: 28px; }
@@ -101,13 +64,9 @@
   .card ul{ list-style:none; }
   .card li{ padding: 8px 0; border-top:1px dashed var(--line); color: var(--muted); font-size:0.94rem; }
   .card li:first-child{ border-top:none; }
-
-  /* ---------- ARCHITECTURE ---------- */
   .arch-box{ background: var(--surface); border:1px solid var(--line); border-radius:10px; padding: 32px; text-align:center; }
   .arch-box svg{ max-width:100%; height:auto; }
   .arch-note{ font-family: var(--font-mono); font-size:0.8rem; color: var(--muted); margin-top: 18px; }
-
-  /* ---------- TEAM ---------- */
   .team-grid{ display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
   .member{ background: var(--surface); border:1px solid var(--line); border-radius:10px; padding: 22px; text-align:center; }
   .avatar{ width:72px; height:72px; border-radius:50%; margin: 0 auto 16px; background: linear-gradient(135deg, var(--surface-2), var(--line)); display:flex; align-items:center; justify-content:center; font-family:var(--font-mono); color:var(--muted); font-size:0.75rem; border:1px solid var(--line); }
@@ -115,8 +74,6 @@
   .role{ font-size:0.82rem; color: var(--signal); font-family: var(--font-mono); margin-bottom:10px; }
   .m-links{ display:flex; gap:10px; justify-content:center; font-size:0.8rem; color: var(--muted); }
   .m-links a:hover{ color: var(--mesh); }
-
-  /* ---------- REPORTS ---------- */
   .report-list{ display:flex; flex-direction:column; gap:1px; background: var(--line); border:1px solid var(--line); border-radius:10px; overflow:hidden; }
   .report-row{ background: var(--surface); padding: 20px 24px; display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap; }
   .report-row .rname{ font-family: var(--font-display); font-weight:600; }
@@ -124,27 +81,19 @@
   .report-links{ display:flex; gap:10px; }
   .pill{ font-family: var(--font-mono); font-size:0.75rem; padding:7px 14px; border-radius:20px; border:1px solid var(--line); color: var(--muted); transition:.2s; }
   .pill:hover{ border-color: var(--mesh); color: var(--mesh); }
-
-  /* ---------- ADVISOR ---------- */
   .advisor{ display:flex; align-items:center; gap:24px; background: var(--surface); border:1px solid var(--line); border-radius:10px; padding: 28px; flex-wrap:wrap; }
   .advisor .avatar{ flex-shrink:0; }
   .advisor-name{ font-family: var(--font-display); font-size:1.15rem; }
   .advisor-role{ color: var(--muted); font-size:0.9rem; margin-top:4px; }
-
-  /* ---------- FOOTER ---------- */
   footer{ padding: 60px 0 40px; border-top:1px solid var(--line); }
   .foot-grid{ display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap: 24px; }
   .foot-brand{ font-family: var(--font-display); font-weight:700; }
   .foot-links{ display:flex; gap:20px; font-size:0.88rem; color: var(--muted); }
   .foot-links a:hover{ color: var(--signal); }
   .copyright{ margin-top:40px; font-size:0.78rem; color:#4B5563; font-family: var(--font-mono); }
-
   .reveal{ opacity:0; transform: translateY(16px); transition: opacity .6s ease, transform .6s ease; }
   .reveal.in{ opacity:1; transform:none; }
-
-  @media (prefers-reduced-motion: reduce){
-    *{ animation: none !important; transition: none !important; }
-  }
+  @media (prefers-reduced-motion: reduce){ *{ animation: none !important; transition: none !important; } }
 </style>
 </head>
 <body>
@@ -170,7 +119,7 @@
     <p class="lede">GSM, Wi-Fi ve internet olmadan; BLE ve Wi-Fi üzerinden kurulan cihazdan cihaza mesh ağı ile deprem sonrası anlık iletişim. Sunucu yok, ek donanım yok — sadece telefonlar.</p>
     <div class="hero-cta">
       <a href="#raporlar" class="btn btn-primary">Raporları incele</a>
-      <a href="#" class="btn btn-ghost" style="border:1px solid var(--line);">GitHub'da görüntüle</a>
+      <a href="https://github.com/ubbx05/Afet-Durumlar-nda-Mesh-Tabanl-Acil-Haberle-me-A-" class="btn btn-ghost" style="border:1px solid var(--line);" target="_blank" rel="noopener">GitHub'da görüntüle</a>
     </div>
     <div class="terminal">
       <div class="line">$ mesh --status</div>
@@ -226,27 +175,21 @@
             <path d="M0,0 L6,3 L0,6 Z" fill="#8A93A3"/>
           </marker>
         </defs>
-        <!-- Layer boxes -->
         <rect x="40" y="40" width="220" height="180" rx="10" fill="#171D26" stroke="#232B36"/>
         <rect x="340" y="40" width="220" height="180" rx="10" fill="#171D26" stroke="#232B36"/>
         <rect x="640" y="40" width="220" height="180" rx="10" fill="#171D26" stroke="#232B36"/>
-
         <text x="150" y="30" fill="#8A93A3" font-family="JetBrains Mono" font-size="12" text-anchor="middle">TAŞIMA</text>
         <text x="450" y="30" fill="#8A93A3" font-family="JetBrains Mono" font-size="12" text-anchor="middle">YÖNLENDİRME</text>
         <text x="750" y="30" fill="#8A93A3" font-family="JetBrains Mono" font-size="12" text-anchor="middle">GÜVENLİK</text>
-
         <text x="150" y="100" fill="#F1F0EC" font-family="Space Grotesk" font-size="16" text-anchor="middle" font-weight="600">BLE / Wi-Fi</text>
         <text x="150" y="130" fill="#8A93A3" font-family="Inter" font-size="12" text-anchor="middle">IEEE 802.15.1</text>
         <text x="150" y="150" fill="#8A93A3" font-family="Inter" font-size="12" text-anchor="middle">cihazdan cihaza keşif</text>
-
         <text x="450" y="100" fill="#F1F0EC" font-family="Space Grotesk" font-size="16" text-anchor="middle" font-weight="600">AODV</text>
         <text x="450" y="130" fill="#8A93A3" font-family="Inter" font-size="12" text-anchor="middle">RFC 3561</text>
         <text x="450" y="150" fill="#8A93A3" font-family="Inter" font-size="12" text-anchor="middle">talep üzerine rota kurma</text>
-
         <text x="750" y="100" fill="#F1F0EC" font-family="Space Grotesk" font-size="16" text-anchor="middle" font-weight="600">X.509 / PKI</text>
         <text x="750" y="130" fill="#8A93A3" font-family="Inter" font-size="12" text-anchor="middle">RFC 5280 · X25519</text>
         <text x="750" y="150" fill="#8A93A3" font-family="Inter" font-size="12" text-anchor="middle">kimlik doğrulama &amp; şifreleme</text>
-
         <line x1="260" y1="130" x2="330" y2="130" stroke="#8A93A3" stroke-width="1.5" marker-end="url(#arrow)"/>
         <line x1="560" y1="130" x2="630" y2="130" stroke="#8A93A3" stroke-width="1.5" marker-end="url(#arrow)"/>
       </svg>
@@ -263,34 +206,34 @@
     </div>
     <div class="team-grid reveal">
       <div class="member">
-        <div class="avatar">İS</div>
-        <h4>İsim Soyisim</h4>
+        <div class="avatar">UBB</div>
+        <h4>Umut Baran Boztaş</h4>
         <div class="role">BLE Protokolü</div>
-        <div class="m-links"><a href="#">LinkedIn</a><a href="#">GitHub</a></div>
+        <div class="m-links"><a href="https://www.linkedin.com/in/umut-baran-bozta%C5%9F-a64ab836b/" target="_blank" rel="noopener">LinkedIn</a><a href="https://github.com/ubbx05" target="_blank" rel="noopener">GitHub</a></div>
       </div>
       <div class="member">
-        <div class="avatar">İS</div>
-        <h4>İsim Soyisim</h4>
+        <div class="avatar">KB</div>
+        <h4>Kaan Behzetoğlu</h4>
         <div class="role">Yönlendirme (AODV)</div>
-        <div class="m-links"><a href="#">LinkedIn</a><a href="#">GitHub</a></div>
+        <div class="m-links"><a href="https://www.linkedin.com/in/kaan-behzeto%C4%9Flu/" target="_blank" rel="noopener">LinkedIn</a><a href="https://github.com/ghostfox12" target="_blank" rel="noopener">GitHub</a></div>
       </div>
       <div class="member">
-        <div class="avatar">İS</div>
-        <h4>İsim Soyisim</h4>
+        <div class="avatar">MD</div>
+        <h4>Mert Dönmez</h4>
         <div class="role">Güvenlik / PKI</div>
-        <div class="m-links"><a href="#">LinkedIn</a><a href="#">GitHub</a></div>
+        <div class="m-links"><a href="https://www.linkedin.com/in/mert-d%C3%B6nmez/" target="_blank" rel="noopener">LinkedIn</a><a href="https://github.com/mertdonmez1453" target="_blank" rel="noopener">GitHub</a></div>
       </div>
       <div class="member">
-        <div class="avatar">İS</div>
-        <h4>İsim Soyisim</h4>
+        <div class="avatar">MFA</div>
+        <h4>Mehmet Fatih Akay</h4>
         <div class="role">Android Geliştirme</div>
-        <div class="m-links"><a href="#">LinkedIn</a><a href="#">GitHub</a></div>
+        <div class="m-links"><a href="https://www.linkedin.com/in/mehmet-fatih-akay-029935295/" target="_blank" rel="noopener">LinkedIn</a><a href="https://github.com/mefakay" target="_blank" rel="noopener">GitHub</a></div>
       </div>
       <div class="member">
-        <div class="avatar">İS</div>
-        <h4>İsim Soyisim</h4>
+        <div class="avatar">ATÖ</div>
+        <h4>Ahmet Taha Özcan</h4>
         <div class="role">Test &amp; Entegrasyon</div>
-        <div class="m-links"><a href="#">LinkedIn</a><a href="#">GitHub</a></div>
+        <div class="m-links"><a href="https://www.linkedin.com/in/ahmettahaozcan/" target="_blank" rel="noopener">LinkedIn</a><a href="https://github.com/zapodmania" target="_blank" rel="noopener">GitHub</a></div>
       </div>
     </div>
   </div>
@@ -310,7 +253,7 @@
           <div class="rdesc">Kapsam, motivasyon ve genel yaklaşım</div>
         </div>
         <div class="report-links">
-          <a href="docs/reports/Project_Proposal (1).pdf" class="pill">PDF</a>
+          <a href="docs/reports/Project_Proposal.pdf" class="pill" target="_blank">PDF</a>
         </div>
       </div>
       <div class="report-row">
@@ -319,7 +262,7 @@
           <div class="rdesc">Fonksiyonel ve fonksiyonel olmayan gereksinimler</div>
         </div>
         <div class="report-links">
-          <a href="docs/reports/Project_Specifications_Report (1).pdf" class="pill">PDF</a>
+          <a href="docs/reports/Project_Specifications_Report.pdf" class="pill" target="_blank">PDF</a>
         </div>
       </div>
       <div class="report-row">
@@ -328,7 +271,7 @@
           <div class="rdesc">Sistem analizi ve tasarım kararları</div>
         </div>
         <div class="report-links">
-          <a href="docs/reports/Analysis_Report (1).pdf" class="pill">PDF</a>
+          <a href="docs/reports/Analysis_Report.pdf" class="pill" target="_blank">PDF</a>
         </div>
       </div>
       <div class="report-row">
@@ -337,7 +280,7 @@
           <div class="rdesc">Sistem mimarisi ve bileşen tasarımı</div>
         </div>
         <div class="report-links">
-          <a href="docs/reports/High-Level Design Report.pdf" class="pill">PDF</a>
+          <a href="docs/reports/High-Level Design Report.pdf" class="pill" target="_blank">PDF</a>
         </div>
       </div>
       <div class="report-row">
@@ -346,7 +289,7 @@
           <div class="rdesc">Standartlara uygunluk, kısıtlar ve beklenen etkiler</div>
         </div>
         <div class="report-links">
-          <a href="docs/reports/Proje_Kisit_ve_Etkiler_PKEPlan.pdf" class="pill">PDF</a>
+          <a href="docs/reports/Proje_Kisit_ve_Etkiler_PKEPlan.pdf" class="pill" target="_blank">PDF</a>
         </div>
       </div>
     </div>
@@ -373,8 +316,8 @@
     <div class="foot-grid">
       <div class="foot-brand"><span class="brand-dot" style="display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--mesh);margin-right:8px;"></span>MeshLine</div>
       <div class="foot-links">
-        <a href="mailto:takim@example.com">takim@example.com</a>
-        <a href="#">GitHub</a>
+        <a href="mailto:teammutfak.info@gmail.com">teammutfak.info@gmail.com</a>
+        <a href="https://github.com/ubbx05/Afet-Durumlar-nda-Mesh-Tabanl-Acil-Haberle-me-A-" target="_blank" rel="noopener">GitHub</a>
         <a href="#raporlar">Raporlar</a>
       </div>
     </div>
@@ -383,14 +326,12 @@
 </footer>
 
 <script>
-  // Reveal on scroll
   const revealEls = document.querySelectorAll('.reveal');
   const io = new IntersectionObserver((entries)=>{
     entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
   }, { threshold: 0.15 });
   revealEls.forEach(el=>io.observe(el));
 
-  // Hero mesh network canvas
   const canvas = document.getElementById('meshCanvas');
   const ctx = canvas.getContext('2d');
   let w, h, nodes;
@@ -414,7 +355,6 @@
   function draw(){
     ctx.clearRect(0,0,w,h);
     const maxDist = 160;
-
     for(let i=0;i<nodes.length;i++){
       for(let j=i+1;j<nodes.length;j++){
         const a=nodes[i], b=nodes[j];
@@ -430,7 +370,6 @@
         }
       }
     }
-
     nodes.forEach(n=>{
       if(!reducedMotion){
         n.x += n.vx; n.y += n.vy;
@@ -444,7 +383,6 @@
       ctx.fillStyle = '#3DDC97';
       ctx.fill();
     });
-
     if(!reducedMotion) requestAnimationFrame(draw);
   }
 
