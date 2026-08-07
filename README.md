@@ -39,4 +39,4 @@ Tüm proje dokümantasyonuna (PDF ve DOCX) [proje sitesindeki Raporlar bölümü
 
 ## Lisans
 
-Bu proje açık kaynaklıdır. Ticari kapalı kaynak alternatiflerin (ör. Bridgefy) aksine, kod tabanı ve güvenlik yaklaşımı herkese açıktır.
+Bu proje açık kaynaklıdır. Ticari kapalı kaynak alternatiflerin (ör. Bridgefy) aksine, kod tabanı ve güvenlik yaklaşımı herkese açıktır.   
