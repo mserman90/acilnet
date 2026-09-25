@@ -1,10 +1,11 @@
 
-# AcilNet - Multiplatform Offgrid Mesh
+# AcilNet - https://mserman90.github.io/acilnet/
 
-## Deploy Tek Push
-1. Bu zip'i acilnet reposuna yukle (web uzerinden Upload files)
-2. Settings -> Pages -> Source: GitHub Actions
-3. Vercel: vercel.com/new -> Import acilnet -> Deploy (vercel.json otomatik tanir)
-4. Actions -> Deploy AcilNet Multiplatform -> APK artifact indir
+Multiplatform offgrid mesh - Web PWA + Android
 
-Canli: https://mserman90.github.io/acilnet/ ve https://acilnet.vercel.app
+Canlı:
+- Vercel: https://acilnet-1.vercel.app/
+- Pages: https://mserman90.github.io/acilnet/
+
+Web PWA: 4 SOS seviyesi, 3.1kHz düdük, SOS flaşör, 7 hop radar, BroadcastChannel mesh
+Android: BLE + Nearby Connections, aynı JSON protokol
